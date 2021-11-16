@@ -4,57 +4,79 @@ using UnityEngine;
 
 public class playerShooting : MonoBehaviour {
 	[Header("Shooting Number Variables")]
-	public float shootingDistance = 300.0f; //how far the bullet should travel (detect enemy)
+	public float shootingDistance = 100.0f; //how far the bullet should travel (detect enemy)
 	public Transform firingPoint; //Where the bullet will travel/check from (realistic gun)
 	private Vector2 mousePosition; //position of mouse
 	private Vector2 firingOrigin; //the (x,y) coordinates of the firingpoint gameObject
 	private RaycastHit2D hit; //the line the bullet will follow
-	private enemyBehavior damaging; //the enemy script to access variables
-	private weaponInfo useClip; //the weapon info script to access variables
+	public int maxAmmo = 6;
+	public int currentAmmo;
+
+	public GameObject projectile;
+	public float bulletSpeed = 15.0f;
+	public Camera cam;
+	Vector3 originalPos;
+
+	public float reloadTime = 1.0f;
+
+	private bool shake;
 
 	// Use this for initialization
 	void Start () {
-//HEAD
-
-        useClip = firingPoint.GetComponent<weaponInfo>();
-		useClip = firingPoint.GetComponent<weaponInfo>();
-// master
+		Reload();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown(KeyCode.Space))
+	IEnumerator ReloadDelay()
+	{
+		yield return new WaitForSeconds(reloadTime);
+		currentAmmo = maxAmmo;
+	}
+	void Reload()
+	{
+		StartCoroutine(ReloadDelay());
+	}
+	IEnumerator StopShake(float duration)
+	{
+		yield return new WaitForSeconds(duration);
+		cam.transform.localPosition = originalPos;
+		shake = false;
+	}
+	void Fire()
+	{
+		if (currentAmmo == 0)
 		{
-			fire();
+			Reload();
+		}
+		else
+		{
+			firingOrigin = new Vector2(firingPoint.position.x, firingPoint.position.y);
+			//mousePosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+			//hit = Physics2D.Raycast(firingOrigin, mousePosition - firingOrigin, shootingDistance);
+
+			GameObject bullet = Instantiate(projectile, firingOrigin, firingPoint.rotation);
+			bullet.GetComponent<Rigidbody2D>().velocity = firingPoint.up * bulletSpeed;
+
+			originalPos = cam.transform.localPosition;
+			shake = true;
+			StartCoroutine(StopShake(0.3f));
+
+			currentAmmo -= 1;
 		}
 	}
-
-	void fire()
+	void Update()
 	{
-		//if your current ammo is empty, we try to reload
-		if (useClip.currentClip == 0)
+		if (Input.GetMouseButtonDown(0))
 		{
-			useClip.reload();
+			Fire();
 		}
-		else //you can fire if u have ammo in your clip
+		if (shake)
 		{
-			/*Handles player shooting bullets that checks within a line (hitscan)*/
-			firingOrigin = new Vector2(firingPoint.position.x, firingPoint.position.y);
-			mousePosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
-				Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-			hit = Physics2D.Raycast(firingOrigin, mousePosition-firingOrigin, shootingDistance);
+			float magnitude = 0.05f;
 
-			//Make sure that the firingOrigin is far from the player gameObject 
-			//to ensure that the raycast hits the enemies and not collide with the player itself
-			//and tag all enemies with the same tag to compare
-			if (hit && hit.collider.CompareTag("Enemy"))
-			{
-				damaging = hit.collider.GetComponent<enemyBehavior>();
-				damaging.currentHealth--;
-			}
+			float x = Random.Range(-1f, 1f) * magnitude;
+			float y = Random.Range(-1f, 1f) * magnitude;
 
-			//fires one bullet, subtracting from the current ammo 
-			useClip.currentClip--;
+			cam.transform.localPosition = new Vector3(x, y, originalPos.z);
 		}
 	}
 }
