@@ -15,6 +15,10 @@ public class playerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown("space"))
+		{
+			moveSpeed = moveSpeed * 50;
+		}
 		//player moves up or down
 		if (Input.GetAxisRaw("Vertical") > 0.5f || Input.GetAxisRaw("Vertical") < -0.5f)
 		{
@@ -27,5 +31,6 @@ public class playerMovement : MonoBehaviour {
 			playerX = Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime;
 			transform.Translate(new Vector3(playerX, 0.0f, 0.0f));
 		}
+		moveSpeed = 15.0f;
 	}
 }
