@@ -8,13 +8,12 @@ public class PlayerHealth : MonoBehaviour {
 
     public float hp;
     public float maxHp;
-    public Image healthBar;
-    public Text healthText;
+    public HealthBar healthBar;
+    
     // Use this for initialization
     void Start()
     {
-        healthText.text = (hp / maxHp * 100).ToString() + "%";
-        healthBar.fillAmount = hp / maxHp;
+		healthBar.SetSize(hp / maxHp);
     }
 
     // Update is called once per frame
@@ -25,9 +24,8 @@ public class PlayerHealth : MonoBehaviour {
     {
         hp -= damage;
         float currentHp = hp / maxHp;
-        healthText.text = (currentHp * 100).ToString() + "%";
-        healthBar.fillAmount = currentHp;
-    }
+        healthBar.SetSize(currentHp);
+	}
 
     public void OnTriggerEnter2D(Collider2D other)
     {
@@ -35,7 +33,7 @@ public class PlayerHealth : MonoBehaviour {
         if (other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("why");
-            TakeDamage(5);
+            TakeDamage(50);
         }
     }
 
