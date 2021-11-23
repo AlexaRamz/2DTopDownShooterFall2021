@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Obstacle
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -45,6 +47,15 @@ TagManager:
   - name: Floor
     uniqueID: 2558500573
     locked: 0
+  - name: Obstacles
+    uniqueID: 293084963
+    locked: 0
   - name: Level
     uniqueID: 1811182409
+    locked: 0
+  - name: Particles
+    uniqueID: 1817392239
+    locked: 0
+  - name: UI
+    uniqueID: 2832003065
     locked: 0

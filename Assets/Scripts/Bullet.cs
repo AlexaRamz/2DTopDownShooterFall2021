@@ -5,18 +5,25 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 	public GameObject explosion;
+
+	IEnumerator DestroyOnTime()
+	{
+		yield return new WaitForSeconds(5f);
+		Destroy(gameObject);
+	}
 	void Start()
     {
-        
+		StartCoroutine(DestroyOnTime());
     }
+	void Explosion(Vector3 pos)
+	{
+		GameObject bullet = Instantiate(explosion, pos, Quaternion.identity);
+	}
 	void OnTriggerEnter2D(Collider2D hit)
 	{
-		if (hit && hit.gameObject.CompareTag("Enemy"))
+		if (hit && (hit.gameObject.CompareTag("Enemy") || hit.gameObject.CompareTag("Obstacle")))
 		{
-			GameObject damaging = hit.gameObject;
-			damaging.GetComponent<enemyBehavior>().currentHealth -= 1;
-			Vector2 enemyPos = new Vector2(damaging.transform.position.x, damaging.transform.position.y);
-			GameObject bullet = Instantiate(explosion, enemyPos, Quaternion.identity);
+			Explosion(hit.gameObject.transform.position);
 			Destroy(gameObject);
 		}
 	}

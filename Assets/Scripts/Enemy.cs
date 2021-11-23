@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
-
+public class Enemy : MonoBehaviour 
+{
     public Transform[] patrolAreas; //positions to move from
     public Transform target;
 
@@ -12,21 +12,28 @@ public class Enemy : MonoBehaviour {
     public float waitTime;
     public float startWaitTime;
 
-    public bool patrolling;
     public bool chasing;
 
     private int areaToPatrol;
     void Start()
     {
-        patrolling = true;
         waitTime = startWaitTime;
         areaToPatrol = Random.Range(0, patrolAreas.Length);
     }
 
-    void Update()
+    void FixedUpdate()
     {
+		if (chasing)
+		{
+			Look(target);
 
-        if (patrolling)
+			transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+			if (Vector2.Distance(transform.position, target.position) <= attackRange)
+			{
+				Debug.Log("attack");
+			}
+		}
+		else
         {
             Look(patrolAreas[areaToPatrol]);
             transform.position = Vector2.MoveTowards(transform.position, patrolAreas[areaToPatrol].position, speed * Time.deltaTime);
@@ -44,25 +51,12 @@ public class Enemy : MonoBehaviour {
                 }
             }
         }
-        else if (chasing)
-        {
-
-
-            Look(target);
-
-            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-            if(Vector2.Distance(transform.position, target.position) <= attackRange)
-            {
-                Debug.Log("attack");
-            }
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            patrolling = false;
             chasing = true;
         }
     }
