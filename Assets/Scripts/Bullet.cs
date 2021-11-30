@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 	public GameObject explosion;
-
+	public float knockbackTime;
 	IEnumerator DestroyOnTime()
 	{
 		yield return new WaitForSeconds(5f);
@@ -33,8 +33,11 @@ public class Bullet : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+		
 	void Update()
     {
         
     }
+
+ 
 }
