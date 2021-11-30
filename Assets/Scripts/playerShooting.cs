@@ -20,7 +20,7 @@ public class playerShooting : MonoBehaviour {
 	public float reloadTime = 1.0f;
 
 	private bool shake;
-
+	private Rigidbody2D rb;
 	// Use this for initialization
 	void Start () {
 		Reload();
@@ -79,4 +79,5 @@ public class playerShooting : MonoBehaviour {
 			cam.transform.localPosition = new Vector3(x, y, originalPos.z);
 		}
 	}
+
 }

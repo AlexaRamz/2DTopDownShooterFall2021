@@ -11,9 +11,8 @@ public class Enemy : MonoBehaviour
     public float attackRange;
     public float waitTime;
     public float startWaitTime;
-
     public bool chasing;
-
+    private Rigidbody2D rb;
     private int areaToPatrol;
     void Start()
     {
@@ -59,6 +58,7 @@ public class Enemy : MonoBehaviour
         {
             chasing = true;
         }
+
     }
 
     private void Look(Transform toLook)
@@ -67,4 +67,5 @@ public class Enemy : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
+
 }
