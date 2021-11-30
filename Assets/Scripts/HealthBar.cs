@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-	private Transform bar;
+	public Transform bar;
 	void Start()
     {
-		bar = transform.Find("Bar");
+	
 	}
 
     public void SetSize(float sizeNormalized)

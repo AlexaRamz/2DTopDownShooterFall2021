@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour 
 {
-    public Transform[] patrolAreas; //positions to move from
     public Transform target;
 
     public float speed;
@@ -13,17 +12,16 @@ public class Enemy : MonoBehaviour
     public float startWaitTime;
 
     public bool chasing;
+	bool knock;
 
-    private int areaToPatrol;
     void Start()
     {
         waitTime = startWaitTime;
-        areaToPatrol = Random.Range(0, patrolAreas.Length);
     }
 
     void FixedUpdate()
     {
-		if (chasing)
+		if (knock == false && chasing && target.parent.GetComponent<playerMovement>().canMove)
 		{
 			Look(target);
 
@@ -33,29 +31,22 @@ public class Enemy : MonoBehaviour
 				Debug.Log("attack");
 			}
 		}
-		else
-        {
-            Look(patrolAreas[areaToPatrol]);
-            transform.position = Vector2.MoveTowards(transform.position, patrolAreas[areaToPatrol].position, speed * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, patrolAreas[areaToPatrol].position) <= 2)
-            {
-                if (waitTime <= 0)
-                {
-                    areaToPatrol = Random.Range(0, patrolAreas.Length);
-                    waitTime = startWaitTime;
-                }
-                else
-                {
-                    waitTime -= Time.deltaTime;
-                }
-            }
-        }
     }
-
+	IEnumerator KnockDelay()
+	{
+		yield return new WaitForSeconds(0.2f);
+		gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+		knock = false;
+	}
+	public void KnockBack(Vector2 vel)
+	{
+		knock = true;
+		gameObject.GetComponent<Rigidbody2D>().velocity = vel;
+		StartCoroutine(KnockDelay());
+	}
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && knock == false)
         {
             chasing = true;
         }

@@ -8,7 +8,7 @@ public class EnemyHealth : MonoBehaviour
 	public float hp;
 	public float maxHp = 100f;
 	public HealthBar healthBar;
-	public GameObject main;
+	GameObject main;
 
 	void Start()
 	{
@@ -43,7 +43,7 @@ public class EnemyHealth : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("Bullet"))
 		{
-			TakeDamage(50);
+			TakeDamage(25);
 		}
 	}
 }

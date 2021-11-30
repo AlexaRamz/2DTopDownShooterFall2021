@@ -21,7 +21,13 @@ public class Bullet : MonoBehaviour
 	}
 	void OnTriggerEnter2D(Collider2D hit)
 	{
-		if (hit && (hit.gameObject.CompareTag("Enemy") || hit.gameObject.CompareTag("Obstacle")))
+		if (hit.gameObject.CompareTag("Enemy"))
+		{
+			hit.transform.parent.GetComponent<Enemy>().KnockBack(transform.up * 10);
+			Explosion(hit.gameObject.transform.position);
+			Destroy(gameObject);
+		}
+		else if (hit.gameObject.CompareTag("Obstacle"))
 		{
 			Explosion(hit.gameObject.transform.position);
 			Destroy(gameObject);

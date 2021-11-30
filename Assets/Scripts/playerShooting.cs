@@ -43,24 +43,27 @@ public class playerShooting : MonoBehaviour {
 	}
 	void Fire()
 	{
-		if (currentAmmo == 0)
+		if (gameObject.GetComponent<playerMovement>().canMove)
 		{
-			Reload();
-		}
-		else
-		{
-			firingOrigin = new Vector2(firingPoint.position.x, firingPoint.position.y);
-			//mousePosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-			//hit = Physics2D.Raycast(firingOrigin, mousePosition - firingOrigin, shootingDistance);
+			if (currentAmmo == 0)
+			{
+				Reload();
+			}
+			else
+			{
+				firingOrigin = new Vector2(firingPoint.position.x, firingPoint.position.y);
+				//mousePosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+				//hit = Physics2D.Raycast(firingOrigin, mousePosition - firingOrigin, shootingDistance);
 
-			GameObject bullet = Instantiate(projectile, firingOrigin, firingPoint.rotation);
-			bullet.GetComponent<Rigidbody2D>().velocity = firingPoint.up * bulletSpeed;
+				GameObject bullet = Instantiate(projectile, firingOrigin, firingPoint.rotation);
+				bullet.GetComponent<Rigidbody2D>().velocity = firingPoint.up * bulletSpeed;
+				
+				originalPos = cam.transform.localPosition;
+				shake = true;
+				StartCoroutine(StopShake(0.3f));
 
-			originalPos = cam.transform.localPosition;
-			shake = true;
-			StartCoroutine(StopShake(0.3f));
-
-			currentAmmo -= 1;
+				currentAmmo -= 1;
+			}
 		}
 	}
 	void Update()
