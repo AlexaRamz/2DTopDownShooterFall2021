@@ -15,14 +15,8 @@ public class knockbacktest : MonoBehaviour
 
 			Rigidbody2D Enemy = gameObject.GetComponent<Rigidbody2D>();
     		if(Enemy != null){
-    			Enemy.isKinematic = false;
-        		Vector2 difference = Enemy.transform.position - transform.position;
-        		difference = difference.normalized * 4;
         		Enemy.velocity = other.transform.up * 2;
-        		Enemy.isKinematic = true;
         		StartCoroutine(knockbackCo(Enemy));
-
-
     	}
 
     }
@@ -32,8 +26,6 @@ public class knockbacktest : MonoBehaviour
         if(Enemy != null){
             yield return new WaitForSeconds(2f);
             Enemy.velocity = Vector2.zero;
-            Enemy.isKinematic = true;
-
         }
 
     }
