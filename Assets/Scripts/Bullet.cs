@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
 		}
 		else if (hit.gameObject.CompareTag("Obstacle"))
 		{
+			hit.gameObject.GetComponent<BoulderDrop>().TakeDamage();
 			Explosion(hit.gameObject.transform.position);
 			Destroy(gameObject);
 		}

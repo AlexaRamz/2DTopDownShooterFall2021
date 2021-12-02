@@ -50,6 +50,12 @@ public class PlayerHealth : MonoBehaviour
 
 		StartCoroutine(Flicker());
 	}
+	public void Heal()
+	{
+		hp = maxHp;
+		float currentHp = hp / maxHp;
+		healthBar.SetSize(currentHp);
+	}
 	void Die()
 	{
 		gameObject.GetComponent<SpriteRenderer>().enabled = false;

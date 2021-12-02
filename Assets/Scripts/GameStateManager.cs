@@ -9,12 +9,12 @@ public class GameStateManager : MonoBehaviour
 	[SerializeField] private string m_TitleScreenName;
 
 	public static GameStateManager m_instance;
-	private static GAMESTATE m_GameState;
+	//private static GAMESTATE m_GameState;
 
-	enum GAMESTATE{
-		MENU,
-		PLAYING,
-	}
+	//enum GAMESTATE{
+	//	MENU,
+	//	PLAYING,
+	//}
 
 	private void Awake()
 	{
@@ -32,7 +32,7 @@ public class GameStateManager : MonoBehaviour
 
 	public static void PlayGame()
 	{
-		m_GameState = GAMESTATE.PLAYING;
+		//m_GameState = GAMESTATE.PLAYING;
 		if(m_instance.m_Levels.Count > 0)
 		{
 			SceneManager.LoadScene(m_instance.m_Levels[0]);
